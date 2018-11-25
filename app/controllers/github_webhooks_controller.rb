@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class GithubWebhooksController < ApplicationController
   def webhook
     event = JSON.parse(request.body.read)
@@ -5,7 +7,7 @@ class GithubWebhooksController < ApplicationController
     send method, event
   end
 
-  def handle_opened(event)
+  def handle_opened(_event)
     @author = Author.new(author_params)
     if @author.save
       @author.books.new(
@@ -13,10 +15,23 @@ class GithubWebhooksController < ApplicationController
         price: rand(5..50),
         publisher: @author
       ).save
-      render json: {status: 200}
+      render json: { status: :ok }
     else
-      render_error(@author, :unprocessable_entity)
+      render json: @author.errors, status: :unprocessable_entity
     end
+  end
+
+  def handle_edited(event)
+    @author = Author.find_by(name: event['issue']['title'])
+    if @author.update(author_params)
+      render json: { status: :ok }
+    else
+      render json: @author.errors, status: :unprocessable_entity
+    end
+  end
+
+  def handle_deleted(event)
+    Author.find_by(name: event['issue']['title']).destroy
   end
 
   private

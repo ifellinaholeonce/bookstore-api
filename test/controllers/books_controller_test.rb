@@ -18,24 +18,24 @@ class BooksControllerTest < ActionDispatch::IntegrationTest
       post books_url, params: {
         "data": {
           "attributes": {
-            "title": "Ember and Coal",
+            "title": 'Ember and Coal',
             "price": 9.99
           },
           "relationships": {
             "author": {
               "data": {
-                "type": "authors",
-                "id": "#{@author.id}"
+                "type": 'authors',
+                "id": @author.id.to_s
               }
             },
             "publisher": {
               "data": {
-                "type": "authors",
-                "id": "#{@author.id}"
+                "type": 'authors',
+                "id": @author.id.to_s
               }
             }
           },
-          "type": "books"
+          "type": 'books'
         }
       }, as: :json
     end

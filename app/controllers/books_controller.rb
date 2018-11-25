@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BooksController < ApplicationController
   before_action :set_book, only: %i[show update destroy]
 
@@ -5,7 +7,7 @@ class BooksController < ApplicationController
   def index
     @books = Book.limit(params[:limit])
 
-    render json: @books, meta: {total: Book.count}
+    render json: @books, meta: { total: Book.count }
   end
 
   # GET /books/1
