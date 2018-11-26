@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class GithubWebhooksController < ApplicationController
+  require 'faker'
+
   def webhook
     event = JSON.parse(request.body.read)
     method = 'handle_' + event['action']
@@ -11,7 +13,7 @@ class GithubWebhooksController < ApplicationController
     @author = Author.new(author_params)
     if @author.save
       @author.books.new(
-        title: "Biography of #{@author.name}",
+        title: Faker::Book.title,
         price: rand(5..50),
         publisher: @author
       ).save

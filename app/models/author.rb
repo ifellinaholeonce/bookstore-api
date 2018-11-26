@@ -10,7 +10,7 @@ class Author < ApplicationRecord
                        class_name: 'Book',
                        as: :publisher,
                        dependent: :destroy
-
+  validates :name, presence: true
   def discount
     10
   end
