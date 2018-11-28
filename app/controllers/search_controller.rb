@@ -8,7 +8,6 @@ class SearchController < ApplicationController
 
     search_books
     search_authors
-    render json: { books: @books, authors: @authors }, status: :ok
   end
 
   private
