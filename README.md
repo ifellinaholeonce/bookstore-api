@@ -14,7 +14,9 @@
 
 ### Getting Started
 A. Master Key
-Add the master.key file to config folder
+```
+Add the master.key file to the config folder
+```
 
 B. Setup DB
 ```
@@ -47,15 +49,15 @@ Copy the http address to clipboard
 
 C. Set ENV variable in terminal
 **_Note: This url must contain the http:// prefix_**
-```
-export WEBHOOK_URL=_ngrok's http address_
-```
+<pre>
+export WEBHOOK_URL=<i>ngrok's http address</i>
+</pre>
 
 D. Setup Github Webhook
 ```
 bin/rails github_api:create_webhook
 ```
-**Result: "Issues webhook created for bookstore-api pointed to _WEBHOOK_URL_/github"**
+**Result: "Issues webhook created for bookstore-api pointed to <i>your_WEBHOOK_URL</i>/github"**
 
 ### Seed DB
 **Note: Ensure Rails server is running with bin/rails s -b 0.0.0.0 first**
@@ -79,6 +81,7 @@ This will send a post request using the webhook. The server will update the auth
 
 ### Delete Issue
 This will send a post request using the webhook. The server will delete the author and all book's belonging to the author.
+
 **Note: Delete Issue is in Beta on Github. The delete button can be found on the bottom right under notifications**
 ![alt text][delete]
 
