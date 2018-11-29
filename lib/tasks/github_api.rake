@@ -17,6 +17,7 @@ namespace :github_api do
       ],
       config: {
         url: url,
+        secret: Rails.application.credentials.github[:webhook_secret],
         content_type: 'json'
       }
     )

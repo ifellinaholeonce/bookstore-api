@@ -5,7 +5,7 @@
 ### Prerequisites
 
 ```
-- Ruby 2.5.3
+- Ruby 2.5.1
 - Rails 5.2 and up
 - Ember 3.5 (frontend)(https://github.com/ifellinaholeonce/bookstore-client)
 - Master.key

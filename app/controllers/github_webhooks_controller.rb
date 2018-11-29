@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class GithubWebhooksController < ApplicationController
-  require 'faker'
+  before_action :transform_params
 
   def webhook
+    render :forbidden if verify_signature(request.body.read)
     event = JSON.parse(request.body.read)
     method = 'handle_' + event['action']
     send method, event
@@ -11,16 +12,17 @@ class GithubWebhooksController < ApplicationController
 
   def handle_opened(_event)
     @author = Author.new(author_params)
-    if @author.save
+    Author.transaction do
+      @author.save
       @author.books.new(
         title: Faker::Book.title,
         price: rand(5..50),
         publisher: @author
       ).save
       render json: { status: :ok }
-    else
-      render json: @author.errors, status: :unprocessable_entity
     end
+  rescue ActiveRecord::RecordInvalid => exception
+    render json: exception.message, status: :unprocessable_entity
   end
 
   def handle_edited(event)
@@ -42,6 +44,18 @@ class GithubWebhooksController < ApplicationController
   private
 
   def author_params
-    params.require(:issue).permit(:title, :body)
+    params.require(:author).permit(:name, :biography)
+  end
+
+  def transform_params
+    params[:author] = {
+      name: params[:issue][:title],
+      biography: params[:issue][:body]
+    }
+  end
+
+  def verify_signature(payload_body)
+    signature = 'sha1=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha1'), Rails.application.credentials.github[:webhook_secret], payload_body)
+    return false unless Rack::Utils.secure_compare(signature, request.env['HTTP_X_HUB_SIGNATURE'])
   end
 end
