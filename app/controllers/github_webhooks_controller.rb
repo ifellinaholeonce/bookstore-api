@@ -25,6 +25,9 @@ class GithubWebhooksController < ApplicationController
 
   def handle_edited(event)
     @author = Author.find_by(name: event['issue']['title'])
+    return render json: {
+      errors: "Editing Issue titles not currently supported. Author not updated."
+    }, status: :unprocessable_entity unless @author.present?
     if @author.update(author_params)
       render json: { status: :ok }
     else

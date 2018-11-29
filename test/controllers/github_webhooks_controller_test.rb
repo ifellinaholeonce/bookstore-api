@@ -25,6 +25,13 @@ class GithubWebhooksControllerTest < ActionDispatch::IntegrationTest
       @author.reload
       assert_equal 'MyNewPayloadBody', @author.biography
     end
+    test 'it returns error when changing issue title' do
+      assert_equal 'Valid Author', @author.name
+      @payload[:issue][:title] = 'MyAuthor2'
+      post github_webhook_path, params: @payload, as: :json
+      assert_response 422
+      assert_equal 'Editing Issue titles not currently supported. Author not updated.', JSON.parse(response.body)['errors']
+    end
   end
 
   class DeleteIssue < GithubWebhooksControllerTest

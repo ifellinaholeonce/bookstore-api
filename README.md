@@ -1,4 +1,4 @@
-# README
+# Bookstore API README
 
 ## Setup
 
@@ -60,13 +60,13 @@ bin/rails github_api:create_webhook
 **Result: "Issues webhook created for bookstore-api pointed to <i>your_WEBHOOK_URL</i>/github"**
 
 ### Seed DB
-**Note: Ensure Rails server is running with bin/rails s -b 0.0.0.0 first**
+**Note: Ensure Rails server is running with bin/rails s -b 0.0.0.0 and your ngrok tunnel is open first**
 
 ```
 bin/rails github_api:create_issues
 ```
 
-On your server console you will see a number of post request come in from the github webhook. This will seed the database with authors and books.
+On your server console you will see a number of post requests come in from the github webhook. This will seed the database with authors and books.
 
 ## Github Integration
 **Note: Rails server must be running and Ngrok must be open using the setup URL**
@@ -78,6 +78,7 @@ This will send a post request using the webook. The server will create a new aut
 
 ### Edit Issue
 This will send a post request using the webhook. The server will update the author's biography to match the new description.
+**Note: Updating the Issue title is not supported, yet.**
 
 ### Delete Issue
 This will send a post request using the webhook. The server will delete the author and all book's belonging to the author.
