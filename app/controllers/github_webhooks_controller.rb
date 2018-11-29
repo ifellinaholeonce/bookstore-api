@@ -4,7 +4,7 @@ class GithubWebhooksController < ApplicationController
   before_action :transform_params
 
   def webhook
-    render :forbidden if verify_signature(request.body.read)
+    render json: {errors: 'Mismatched Secret'}, status: :forbidden unless verify_signature(request.body.read)
     event = JSON.parse(request.body.read)
     method = 'handle_' + event['action']
     send method, event
@@ -55,6 +55,9 @@ class GithubWebhooksController < ApplicationController
   end
 
   def verify_signature(payload_body)
+    return true if Rails.env.eql?('test')
+    return false unless request.env['HTTP_X_HUB_SIGNATURE'].present?
+
     signature = 'sha1=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha1'), Rails.application.credentials.github[:webhook_secret], payload_body)
     return false unless Rack::Utils.secure_compare(signature, request.env['HTTP_X_HUB_SIGNATURE'])
   end
