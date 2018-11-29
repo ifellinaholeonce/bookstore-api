@@ -85,4 +85,4 @@ This will send a post request using the webhook. The server will delete the auth
 **Note: Delete Issue is in Beta on Github. The delete button can be found on the bottom right under notifications**
 ![alt text][delete]
 
-[delete]: https://github.com/ifellinaholeonce/bookstore-api/blob/master/docs/delete.png "Logo Title Text 2"
+[delete]: https://github.com/ifellinaholeonce/bookstore-api/blob/master/docs/delete.png "Delete"
