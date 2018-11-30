@@ -49,7 +49,6 @@ class GithubWebhooksController < ApplicationController
   end
 
   def verify_signature(payload_body)
-    return true if Rails.env.eql?('test') #I need to escape this as I currently cannot get the secrets to pass correctly
     return false unless request.env['HTTP_X_HUB_SIGNATURE'].present?
 
     signature = 'sha1=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha1'), Rails.application.credentials.github[:webhook_secret], payload_body)
