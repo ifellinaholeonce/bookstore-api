@@ -12,17 +12,11 @@ class GithubWebhooksController < ApplicationController
 
   def handle_opened(_event)
     @author = Author.new(author_params)
-    Author.transaction do
-      @author.save
-      @author.books.new(
-        title: Faker::Book.title,
-        price: rand(5..50),
-        publisher: @author
-      ).save
+    if @author.create_with_book
       render json: { status: :ok }
+    else
+      render json: @author.errors, status: :unprocessable_entity
     end
-  rescue ActiveRecord::RecordInvalid => exception
-    render json: exception.message, status: :unprocessable_entity
   end
 
   def handle_edited(event)

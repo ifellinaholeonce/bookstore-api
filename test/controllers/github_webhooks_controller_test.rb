@@ -13,6 +13,13 @@ class GithubWebhooksControllerTest < ActionDispatch::IntegrationTest
         post github_webhook_path, params: @payload, headers: @headers, as: :json
       end
     end
+    test 'bad input' do
+      assert_difference ['Author.count'], 0 do
+        post github_webhook_path, params: { action: 'opened', issue: { title: '', body: '' } }, headers: @headers, as: :json
+      end
+      assert_equal ["can't be blank"], JSON.parse(response.body)['name']
+      assert_response :unprocessable_entity
+    end
   end
 
   class EditIssue < GithubWebhooksControllerTest
