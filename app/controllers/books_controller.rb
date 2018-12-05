@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BooksController < ApplicationController
   before_action :set_book, only: %i[show update destroy]
 
@@ -5,7 +7,7 @@ class BooksController < ApplicationController
   def index
     @books = Book.limit(params[:limit])
 
-    render json: @books, meta: {total: Book.count}
+    render json: @books, meta: { total: Book.count }
   end
 
   # GET /books/1
@@ -16,7 +18,6 @@ class BooksController < ApplicationController
   # POST /books
   def create
     @book = Book.new(book_params)
-
     if @book.save
       render json: @book, status: :created, location: @book
     else
@@ -51,7 +52,7 @@ class BooksController < ApplicationController
       params,
       polymorphic: [:publisher]
     )
-    res[:publisher_type] = res[:publisher_type].singularize.capitalize
+    res[:publisher_type] = res[:publisher_type].singularize.capitalize if res[:publisher_type].present?
     res
   end
 end

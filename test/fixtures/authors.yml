@@ -1,7 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: MyString
+valid_author:
+  name: Valid Author
+  biography: MyBiography
 
 two:
   name: MyString
+  biography: MyBiography
